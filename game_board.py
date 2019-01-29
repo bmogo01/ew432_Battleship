@@ -1,7 +1,9 @@
 import pygame
 import colors
 
+
 NBLOCKS = 11
+
 
 class GameBoard(pygame.sprite.Sprite):
     """
@@ -34,6 +36,7 @@ class GameBoard(pygame.sprite.Sprite):
         self.x_step = self.width // NBLOCKS
         self.y_step = self.height // NBLOCKS
 
+
     def refresh(self):
         # Draw board background use color [board_bkgd]
         self.image.fill(colors.board_bkgd)
@@ -42,17 +45,24 @@ class GameBoard(pygame.sprite.Sprite):
 
         # Draw row and column header backgrounds
         #   Headers should be 1 block wide/tall and use color [header]
-
+        pygame.draw.rect(self.image, colors.header, (0, 0, self.x_step, self.height))
+        pygame.draw.rect(self.image, colors.header, (0, 0, self.width, self.y_step))
         # Draw grid lines use color [foreground]
-
+        for n in range(1,NBLOCKS):
+            pygame.draw.line(self.image, colors.foreground, (self.x_step*n, 0), (self.x_step*n, self.height))
+            pygame.draw.line(self.image, colors.foreground, (0, self.x_step * n), (self.width, self.y_step * n))
         # Draw row labels [A-J] centered in each header block
         #    use color [foreground] and font [
+
 
         # Draw column labels [0-9] centered in each header block
         #    use color [foreground]
 
         # Draw border around the board use color [foreground]
-
+        pygame.draw.line(self.image, colors.foreground, (0, 0), (self.width, 0))
+        pygame.draw.line(self.image, colors.foreground, (self.width-1, 0), (self.width-1, self.height-1))
+        pygame.draw.line(self.image, colors.foreground, (self.width-1, self.height-1), (0, self.height-1))
+        pygame.draw.line(self.image, colors.foreground, (0, self.height), (0, 0))
         # --------- END YOUR CODE ------------
 
     def draw(self, surface):
