@@ -53,11 +53,16 @@ class Human:
 
             # 1.) create ship of the given length at a random (row,col)
             #     position either horizontal or vertical
+            def createShip:
+
+            createShip()
 
             # 2.) check if this conflicts with any of the other ships by
             #     by making sure that every entry in _board_matrix is None
 
             # 2b.) If the ship is not valid, retry step 1
+            if conflict == True:
+                createShip()
 
             # 3.) If the ship is valid set the appropriate elements _board_matrix array
             #     equal to the ship

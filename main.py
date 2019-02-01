@@ -4,7 +4,7 @@ import sys
 
 import colors
 import sprites
-import utilities
+
 import human
 from game_board import GameBoard
 import utilities
@@ -42,6 +42,7 @@ def main():
     my_board.refresh()
     their_board.refresh()
 
+    board.add_sprite(sprites.ship_top, (0, 0)) ############################################################
     # --------- BEGIN YOUR CODE ----------
     # add titles above the game boards
     # draw 'YOU' centered above my_board
