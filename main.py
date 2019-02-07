@@ -42,7 +42,6 @@ def main():
     my_board.refresh()
     their_board.refresh()
 
-    # my_board.add_sprite(sprites.msg, (0, 0)) ############################################################
     # --------- BEGIN YOUR CODE ----------
     # add titles above the game boards
     # draw 'YOU' centered above my_board
@@ -63,7 +62,6 @@ def main():
     # create a human player
     player1 = human.Human()
     player1.initialize()
-    player1.print_board()
     player1.draw(my_board, their_board)
 
     # place the board on the screen
