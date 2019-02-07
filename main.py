@@ -36,26 +36,26 @@ def main():
     their_board: GameBoard = GameBoard(board_dimension)
     # position their_board PADDING pixels to the right of my_board
     their_board.rect.top = TOP_MARGIN
-    their_board.rect.left = PADDING*2+my_board.rect.width
+    their_board.rect.left = PADDING * 2 + my_board.rect.width
 
     # paint the board surface
     my_board.refresh()
     their_board.refresh()
 
-    board.add_sprite(sprites.ship_top, (0, 0)) ############################################################
+    # my_board.add_sprite(sprites.msg, (0, 0)) ############################################################
     # --------- BEGIN YOUR CODE ----------
     # add titles above the game boards
     # draw 'YOU' centered above my_board
     you = utilities.create_text('YOU', 24, colors.foreground)
     youRect = you.get_rect()
-    youRect.centerx = PADDING+(BLOCK_SIZE*NBLOCKS)/2
+    youRect.centerx = PADDING + (BLOCK_SIZE * NBLOCKS) / 2
     youRect.centery = TOP_MARGIN / 2
     screen.blit(you, youRect)
 
     # draw 'THEM' centered above their_board
     them = utilities.create_text('THEM', 24, colors.foreground)
     themRect = them.get_rect()
-    themRect.centerx = PADDING*2 + (BLOCK_SIZE * NBLOCKS) * 1.5
+    themRect.centerx = PADDING * 2 + (BLOCK_SIZE * NBLOCKS) * 1.5
     themRect.centery = TOP_MARGIN / 2
     screen.blit(them, themRect)
     # --------- END YOUR CODE ------------
@@ -63,6 +63,7 @@ def main():
     # create a human player
     player1 = human.Human()
     player1.initialize()
+    player1.print_board()
     player1.draw(my_board, their_board)
 
     # place the board on the screen
