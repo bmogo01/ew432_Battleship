@@ -1,5 +1,5 @@
 # EW432 Battleship Game
 
-## author
+## Brian Mogavero
 
 *your custom description here*

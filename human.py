@@ -48,22 +48,53 @@ class Human:
 
         for ship_length in [5, 4, 3, 3, 2]:
             # --------- BEGIN YOUR CODE ----------
+            validPlac = False
+            while validPlac is False:
+                # 1.) create ship of the given length at a random (row,col)
+                #     position either horizontal or vertical
+                orient = randint(0, 1)
+                if orient == 1:
+                    row = randint(0, 10-ship_length)
+                    col = randint(0,9)
+                else:
+                    row = randint(0,9)
+                    col = randint(0, 10-ship_length)
 
-            pass  # remove this line
+                my_ship = ship.Ship(ship_length, row, col, orient)
 
-            # 1.) create ship of the given length at a random (row,col)
-            #     position either horizontal or vertical
+                # 2.) check if this conflicts with any of the other ships by
+                #     by making sure that every entry in _board_matrix is None
+                conflict = ['No']
+                # 2b.) If the ship is not valid, retry step 1
+                if orient == 1:
+                    for n in range(ship_length):
+                        if self._board_matrix[row+n][col] is None:
+                            conflict.append('No')
+                        else:
+                            conflict.append('Yes')
 
-            # 2.) check if this conflicts with any of the other ships by
-            #     by making sure that every entry in _board_matrix is None
+                else:
+                    for n in range(ship_length):
+                        if self._board_matrix[row][col+n] is None:
+                            conflict.append('No')
+                        else:
+                            conflict.append('Yes')
+                print(conflict)
+                if 'Yes' not in conflict:
+                    # 3.) If the ship is valid set the appropriate elements _board_matrix array
+                    #     equal to the ship
+                    # Example: to place a vertical destroyer at C2:
+                    #    board_matrix[2][2] = my_ship
+                    #    board_matrix[3][2] = my_ship
 
-            # 2b.) If the ship is not valid, retry step 1
+                    for n in range(ship_length):
+                        if orient == 1:
+                            self._board_matrix[row+n][col] = my_ship
+                        else:
+                            self._board_matrix[row][col+n] = my_ship
 
-            # 3.) If the ship is valid set the appropriate elements _board_matrix array
-            #     equal to the ship
-            # Example: to place a vertical destroyer at C2:
-            #    board_matrix[2][2] = my_ship
-            #    board_matrix[3][2] = my_ship
+                    self._my_ships.append(my_ship)
+                    validPlac = True
 
 
             # --------- END YOUR CODE ----------

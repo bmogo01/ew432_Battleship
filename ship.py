@@ -1,6 +1,7 @@
 import game_board
 import sprites
 
+
 class Ship:
 
     def __init__(self, length: int, row: int,
@@ -49,7 +50,17 @@ class Ship:
         """
 
         # --------- BEGIN YOUR CODE ----------
+        if self.is_vertical:
+            board.add_sprite(sprites.ship_top, (self.row, self.col))
+            for n in range(1, self.length-1):
+                board.add_sprite(sprites.ship_vertical, (self.row+n, self.col))
+            board.add_sprite(sprites.ship_bottom, (self.row+self.length-1, self.col))
 
+        else:
+            board.add_sprite(sprites.ship_left, (self.row, self.col))
+            for n in range(1, self.length - 1):
+                board.add_sprite(sprites.ship_horizontal, (self.row, self.col+n))
+            board.add_sprite(sprites.ship_right, (self.row, self.col+self.length - 1))
         # --------- END YOUR CODE ----------
 
     def hit(self):
@@ -57,3 +68,4 @@ class Ship:
         self._hits += 1
         if self._hits == self.length:
             self.sunk = True
+
