@@ -73,9 +73,9 @@ turn.blit(sprite_sheet, (0, 0), pygame.Rect(SPRITE_WIDTH+SPRITE_MARGIN, SPRITE_H
 sprites.append(turn)
 
 # ---msg_box (250x122)---
-msg = pygame.Surface((250, 122))
-msg.blit(sprite_sheet, (0, 0), pygame.Rect(0, SPRITE_HEIGHT*3+SPRITE_MARGIN*3, 250, 122))
-sprites.append(msg)
+msg_box = pygame.Surface((250, 122))
+msg_box.blit(sprite_sheet, (0, 0), pygame.Rect(0, SPRITE_HEIGHT*3+SPRITE_MARGIN*3, 250, 122))
+sprites.append(msg_box)
 
 # --------- END YOUR CODE ------------
 

@@ -4,6 +4,7 @@ import sys
 
 import colors
 import sprites
+from time import sleep
 
 import human
 import computer
@@ -74,6 +75,7 @@ def main():
     my_board.draw(screen)
     pygame.display.update()
 
+
     # play the game until one of the players is complete
     while not player1.complete and not player2.complete:
 
@@ -90,20 +92,20 @@ def main():
         player1.draw(my_board, their_board)
         my_board.draw(screen)
         their_board.draw(screen)
+        pygame.display.update()
 
         # process event queue, quit if user clicks 'X' button
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-        pygame.display.update()
 
     # display the winner
     if player1.complete and not player2.complete:
         _display_message(screen, "You Win!")
 
     elif player2.complete and not player1.complete:
-        _display_message(screen, "You Loose!")
+        _display_message(screen, "You Lose!")
     else:
         _display_message(screen, "Tie Game!")
 
@@ -126,11 +128,15 @@ def _display_message(screen: pygame.Surface, msg: str):
     # --------- BEGIN YOUR CODE ----------
 
     # create a text object with size 42 font of [msg]
-
+    endGame = utilities.create_text(msg, 42, colors.foreground)
+    endRect = endGame.get_rect()
+    endRect.centerx = 125
+    endRect.centery = 61
     # blit the text onto the box surface
-
+    box.blit(endGame, endRect)
     # blit the box onto the center of the screen
-
+    screen.blit(box, (((BLOCK_SIZE * NBLOCKS) * 2 + PADDING * 3)/2-125, (BLOCK_SIZE * NBLOCKS + TOP_MARGIN + PADDING)/2-61))
+    pygame.display.update()
     # remove this once you have implemented the drawing code
     print(msg)
 

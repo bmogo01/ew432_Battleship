@@ -1,5 +1,5 @@
 import ship, game_board, sprites
-import string
+
 from random import randint
 from typing import List, Tuple, Optional
 
@@ -79,7 +79,7 @@ class Human:
                             conflict.append('No')
                         else:
                             conflict.append('Yes')
-                print(conflict)
+                #print(conflict)
                 if 'Yes' not in conflict:
                     # 3.) If the ship is valid set the appropriate elements _board_matrix array
                     #     equal to the ship
@@ -122,16 +122,26 @@ class Human:
         # --------- BEGIN YOUR CODE ----------
 
         # Hit logic:
-        # make sure this is a *new* hit (no double guesses)
-        # add to _their_hits
-        # hit the ship
-        # check if ship is sunk
-        # return either (1,None) or (2,my_ship)
+        if my_ship is not None and my_ship not in self._their_hits:
+            # make sure this is a *new* hit (no double guesses)
+            # add to _their_hits
+            self._their_hits.append((row,col))
+            # hit the ship
+            my_ship.hit()
+            # check if ship is sunk
+            if my_ship.sunk:
+                # return either (1,None) or (2,my_ship)
+                print('You sunk my ship!')
+                return (2,my_ship)
+            else:
+                return (1,None)
 
-        # Miss logic:
-        # add to _their_misses
-        # return (0, None)
-
+        else:
+            # Miss logic:
+            # add to _their_misses
+            self._their_misses.append((row,col))
+            # return (0, None)
+            return (0,None)
         # --------- END YOUR CODE ----------
 
 
@@ -144,14 +154,35 @@ class Human:
         # --------- BEGIN YOUR CODE ----------
 
         # 1.) Prompt user for a guess. Valid input would be a string like c,4
+        prompt = input('Enter a valid guess: ')
+        prompt = prompt.split(',')
         #     If the guess is not valid ask the user to enter another guess
-
-        # 2.) Call opponent.guess() to check wether the guess is a hit or miss
-
+        if len(prompt)<2 or len(prompt)>2:
+            prompt = input('Enter another guess (a-j,0-9): ')
+            prompt = prompt.split(',')
+        while prompt[0] not in 'a,b,c,d,e,f,g,h,i,j'.split(',') or prompt[1] not in '0,1,2,3,4,5,6,7,8,9'.split(','):
+            prompt = input('Enter another guess (a-j,0-9): ')
+            prompt = prompt.split(',')
+        prompt[1] = int(prompt[1])
+        n = 0
+        for i in 'a,b,c,d,e,f,g,h,i,j'.split(','):
+            if prompt[0] == i:
+                prompt[0] = n
+            n+=1
+        row = int(prompt[0])
+        col = int(prompt[1])
+        # 2.) Call opponent.guess() to check whether the guess is a hit or miss
+        check = opponent.guess(row, col)
         # 3.) Update my_hits, my_misses, and sunk_ships accordingly
-
+        if check[0] == 0:
+            self._my_misses.append((row,col))
+        if check[0] == 1:
+            self._my_hits.append((row,col))
+        if check[0] == 2:
+            self._sunk_ships.append(check[1])
         # 4.) If the sunk_ships array has 5 ships in it set self.complete to True
-
+        if len(self._sunk_ships) == 5:
+            self.complete = True
         # --------- END YOUR CODE ----------
 
     def print_board(self):
@@ -179,14 +210,14 @@ class Human:
         for my_ship in self._my_ships:
             my_ship.draw(my_board)
         for miss in self._their_misses:
-            my_board.add_sprite(sprites.miss, miss)
+            my_board.add_sprite(sprites.ship_miss, miss)
         for hit in self._their_hits:
-            my_board.add_sprite(sprites.hit, hit)
+            my_board.add_sprite(sprites.ship_hit, hit)
 
             # draw hit indicators on their board
         for miss in self._my_misses:
-            their_board.add_sprite(sprites.miss, miss)
+            their_board.add_sprite(sprites.ship_miss, miss)
         for their_ship in self._sunk_ships:
             their_ship.draw(their_board)
         for hit in self._my_hits:
-            their_board.add_sprite(sprites.hit, hit)
+            their_board.add_sprite(sprites.ship_hit, hit)
