@@ -62,7 +62,8 @@ def main():
     # --------- END YOUR CODE ------------
 
     # create a human player
-    player1 = human.Human()
+    # player1 = human.Human()
+    player1 = computer.Computer()
     player1.initialize()
     player1.draw(my_board, their_board)
 

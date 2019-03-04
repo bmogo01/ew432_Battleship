@@ -30,6 +30,12 @@ class Computer:
         # set to True if all opponent's ships are sunk
         self.complete: bool = False
 
+        self.hit: bool = False
+        self.sunk: bool = False
+        self.count: int = 0
+        self.mem: int = 1
+
+
     def initialize(self):
         """ Create a valid ship layout
         This function populates
@@ -132,6 +138,8 @@ class Computer:
             # check if ship is sunk
             if my_ship.sunk:
                 # return either (1,None) or (2,my_ship)
+                self._their_hits.append((row, col))
+                my_ship.hit()
                 print('You sunk my ship!')
                 return (2, my_ship)
             else:
@@ -154,38 +162,117 @@ class Computer:
         """
 
         # --------- BEGIN YOUR CODE ----------
-
         # 1.) Guess a random space that has not been guessed (or be more clever!)
-        print('My Turn!')
-        time.sleep(1)
-        row = randint(0,9)
-        alph = 'a,b,c,d,e,f,g,h,i,j'.split(',')
-        for i in range(len(alph)):
-            if row == i:
-                print(alph[i],end=',')
-        col = randint(0,9)
-        print(col)
-        while(row,col) in self._my_misses or (row,col) in self._my_hits:
+        time.sleep(0.1)
+        row = 0
+        col = 0
+        if (self.hit and self.sunk == False) or (self.count > 0 and self.sunk == False):
+            self.count += 1
+            self.mem += 1
+            if self.mem > 8 or self.mem > len(self._my_misses):
+                self.mem = 1
+
+            if self.hit == False and len(self._my_hits)>1:
+                if self.count == 1:
+                    row = self._my_misses[-self.mem][0] - 1
+                    col = self._my_misses[-self.mem][1]
+                    if (row, col) in self._my_misses or (
+                    row, col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (
+                    row, col) in self._my_misses or (row, col) in self._my_hits:
+                        self.count += 1
+                        row = self._my_misses[-self.mem][0] + 1
+                        col = self._my_misses[-self.mem][1]
+
+                if self.count == 2:
+                    row = self._my_misses[-self.mem][0] + 1
+                    col = self._my_misses[-self.mem][1]
+                    if (row, col) in self._my_misses or (
+                    row, col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (
+                    row, col) in self._my_misses or (row, col) in self._my_hits:
+                        self.count += 1
+                        row = self._my_misses[-self.mem][0]
+                        col = self._my_misses[-self.mem][1] - 1
+
+                if self.count == 3:
+                    row = self._my_misses[-self.mem][0]
+                    col = self._my_misses[-self.mem][1] - 1
+                    if (row, col) in self._my_misses or (
+                    row, col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (
+                    row, col) in self._my_misses or (row, col) in self._my_hits:
+                        self.count += 1
+
+                if self.count == 4:
+                    if (row, col) in self._my_misses or (row, col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (row, col) in self._my_misses or (row, col) in self._my_hits:
+                        self.count = 0
+                    else:
+                        row = self._my_misses[-self.mem][0]
+                        col = self._my_misses[-self.mem][1] + 1
+                        self.count = 0
+
+            if self.count == 1:
+                row = self._my_hits[-1][0] - 1
+                col = self._my_hits[-1][1]
+                if (row,col) in self._my_misses or (row,col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (row,col) in self._my_misses or (row,col) in self._my_hits:
+                    self.count += 1
+                    row = self._my_hits[-1][0] + 1
+                    col = self._my_hits[-1][1]
+
+            if self.count == 2:
+                row = self._my_hits[-1][0] + 1
+                col = self._my_hits[-1][1]
+                if (row,col) in self._my_misses or (row,col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (row,col) in self._my_misses or (row,col) in self._my_hits:
+                    self.count += 1
+                    row = self._my_hits[-1][0]
+                    col = self._my_hits[-1][1] - 1
+
+            if self.count == 3:
+                row = self._my_hits[-1][0]
+                col = self._my_hits[-1][1] - 1
+                if (row,col) in self._my_misses or (row,col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (row,col) in self._my_misses or (row,col) in self._my_hits:
+                    self.count += 1
+
+            if self.count == 4:
+                if (row,col) in self._my_misses or (row,col) in self._my_hits or row < 0 or row > 9 or col < 0 or col > 9 or (row,col) in self._my_misses or (row,col) in self._my_hits:
+                    self.count = 0
+                else:
+                    row = self._my_hits[-1][0]
+                    col = self._my_hits[-1][1] + 1
+                    self.count = 0
+
+        else:       # if the ship hasn't been hit or sunk, guess random spot
+            if self.sunk:
+                self.sunk = False           # Turn off sunk ship flag
+                self.count = 0
+                self.mem = 1
+
             row = randint(0, 9)
             col = randint(0, 9)
-        # Steps 2-4 are the same as Human.take_turn
+            while(row,col) in self._my_misses or (row,col) in self._my_hits:
+                row = randint(0, 9)
+                col = randint(0, 9)
 
+        # Steps 2-4 are the same as Human.take_turn
         # 2.) Call opponent.guess() to check whether the guess is a hit or miss
         check = opponent.guess(row, col)
         # 3.) Update my_hits, my_misses, and sunk_ships accordingly
         if check[0] == 0:
             self._my_misses.append((row, col))
+            self.hit = False
         if check[0] == 1:
             self._my_hits.append((row, col))
+            self.hit = True
+            self.count = 0
         if check[0] == 2:
+            self._my_hits.append((row, col))
             self._sunk_ships.append(check[1])
+            self.sunk = True
+            self.mem = 1
         # 4.) If the sunk_ships array has 5 ships in it set self.complete to True
         if len(self._sunk_ships) == 5:
             self.complete = True
         # --------- END YOUR CODE ----------
 
         # enforce a short delay to make the computer appear to "think" about its guess
-
 
     def print_board(self):
         """

@@ -179,6 +179,7 @@ class Human:
         if check[0] == 1:
             self._my_hits.append((row,col))
         if check[0] == 2:
+            self._my_hits.append((row, col))
             self._sunk_ships.append(check[1])
         # 4.) If the sunk_ships array has 5 ships in it set self.complete to True
         if len(self._sunk_ships) == 5:
